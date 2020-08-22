@@ -37,9 +37,9 @@
         },
         methods: {
             onEditorChange({ editor, html, text }) {
+              console.log(editor);
+              console.log(text);
                 this.content = html;
-                console.log(editor);
-                console.log(text);
             },
             submit(){
                 console.log(this.content);

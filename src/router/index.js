@@ -7,7 +7,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/main'
+            redirect: '/dashboard'
         },
         {
             path: '/',
@@ -20,6 +20,16 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
+                    path: '/role',
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/rolelist.vue'),
+                    meta: { title: '角色列表' }
+                },
+                {
+                    path: '/resource',
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/resourcelist.vue'),
+                    meta: { title: '资源列表' }
+                },
+                {
                     path: '/icon',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
                     meta: { title: '自定义图标' }
@@ -27,8 +37,13 @@ export default new Router({
                 {
                     path: '/table',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
-                    meta: { title: '基础表格' }
+                    meta: { title: '管理列表' }
                 },
+                // {
+                //     path: '/permission',
+                //     component: () => import(/* webpackChunkName: "table" */ '../components/page/AdminPermission.vue'),
+                //     meta: { title: '权限管理' }
+                // },
                 {
                     path: '/tabs',
                     component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
