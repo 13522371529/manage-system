@@ -82,11 +82,12 @@
                 return this.tagsList.length > 0;
             }
         },
-        // watch:{
-        //     $route(newValue, oldValue){
-        //         this.setTags(newValue);
-        //     }
-        // },
+        watch:{
+            $route(newValue, oldValue){
+              console.log(oldValue)
+                this.setTags(newValue);
+            }
+        },
         created(){
             this.setTags(this.$route);
             // 监听关闭当前页面的标签页

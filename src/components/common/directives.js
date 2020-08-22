@@ -3,12 +3,11 @@ import Vue from 'vue';
 // v-dialogDrag: 弹窗拖拽属性
 Vue.directive('dialogDrag', {
     bind(el, binding, vnode, oldVnode) {
-        console.log(binding)
-        console.log(vnode)
-        console.log(oldVnode)
         const dialogHeaderEl = el.querySelector('.el-dialog__header');
         const dragDom = el.querySelector('.el-dialog');
-
+        console.log(binding);
+        console.log(vnode);
+        console.log(oldVnode);
         dialogHeaderEl.style.cssText += ';cursor:move;'
         dragDom.style.cssText += ';top:0px;'
 

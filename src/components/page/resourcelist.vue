@@ -33,8 +33,8 @@
             >
                 <el-table-column type="selection" width="55" align="center"> </el-table-column>
                 <el-table-column prop="id" label="ID" width="55" align="center"><template slot-scope="scope">{{scope.row.id}}</template></el-table-column>
-                <el-table-column prop="useername" label="用户名" align="center"><template slot-scope="scope">{{scope.row.username}}</template></el-table-column>
-                <el-table-column label="昵称" align="center">
+                <el-table-column prop="useername" label="用户名"><template slot-scope="scope">{{scope.row.username}}</template></el-table-column>
+                <el-table-column label="昵称">
                     <template slot-scope="scope">{{scope.row.nickName}}</template>
                 </el-table-column>
                 <el-table-column label="头像(查看大图)" align="center">
@@ -53,9 +53,9 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="date" label="注册时间" align="center"> <template slot-scope="scope">{{Format(scope.row.createTime)}}</template></el-table-column>
-                <el-table-column prop="date" label="登陆时间" align="center"> <template slot-scope="scope">{{Format(scope.row.loginTime)}}</template></el-table-column>
-                <el-table-column prop="date" label="登陆地点" align="center"> <template slot-scope="scope">{{scope.row.loginAddress}}</template></el-table-column>
+                <el-table-column prop="date" label="注册时间"> <template slot-scope="scope">{{Format(scope.row.createTime)}}</template></el-table-column>
+                <el-table-column prop="date" label="登陆时间"> <template slot-scope="scope">{{Format(scope.row.loginTime)}}</template></el-table-column>
+                <el-table-column prop="date" label="登陆地点"> <template slot-scope="scope">{{scope.row.loginAddress}}</template></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -151,8 +151,7 @@ export default {
             this.getData();
         },
         // 删除操作
-        handleDelete(index,row) {
-          console.log(row);
+        handleDelete(index, row) {
             // 二次确认删除
             this.$confirm('确定要删除吗？', '提示', {
                 type: 'warning'

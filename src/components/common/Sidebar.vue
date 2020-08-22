@@ -58,13 +58,28 @@ export default {
             items: [
                 {
                     icon: 'el-icon-lx-home',
-                    index: 'dashboard',
+                    index: 'main',
                     title: '系统首页'
                 },
+              {
+                icon: 'el-icon-lx-people',
+                index: 'table',
+                title: '管理员模块'
+              },
                 {
-                    icon: 'el-icon-lx-cascades',
-                    index: 'table',
-                    title: '基础表格'
+                    icon: 'el-icon-lx-lock',
+                    index: 'permission',
+                    title: '权限模块',
+                    subs: [
+                      {
+                        index: 'role',
+                        title: '角色列表'
+                      },
+                      {
+                        index: 'resource',
+                        title: '资源列表'
+                      }
+                    ]
                 },
                 {
                     icon: 'el-icon-lx-copy',

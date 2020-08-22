@@ -3,18 +3,12 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 管理列表
+                    <i class="el-icon-lx-cascades"></i> 权限列表
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-<!--                <el-button-->
-<!--                    type="primary"-->
-<!--                    icon="el-icon-delete"-->
-<!--                    class="handle-del mr10"-->
-<!--                    @click="delAllSelection"-->
-<!--                >批量删除</el-button>-->
                 <el-select v-model="query.status" placeholder="状态" class="handle-select mr10" @change="handleSearch">
                     <el-option key="0" label="全部" value=""></el-option>
                     <el-option key="1" label="禁用" value="0"></el-option>
@@ -33,8 +27,8 @@
             >
                 <el-table-column type="selection" width="55" align="center"> </el-table-column>
                 <el-table-column prop="id" label="ID" width="55" align="center"><template slot-scope="scope">{{scope.row.id}}</template></el-table-column>
-                <el-table-column prop="useername" label="用户名" align="center"><template slot-scope="scope">{{scope.row.username}}</template></el-table-column>
-                <el-table-column label="昵称" align="center">
+                <el-table-column prop="useername" label="用户名"><template slot-scope="scope">{{scope.row.username}}</template></el-table-column>
+                <el-table-column label="昵称">
                     <template slot-scope="scope">{{scope.row.nickName}}</template>
                 </el-table-column>
                 <el-table-column label="头像(查看大图)" align="center">
@@ -53,9 +47,9 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="date" label="注册时间" align="center"> <template slot-scope="scope">{{Format(scope.row.createTime)}}</template></el-table-column>
-                <el-table-column prop="date" label="登陆时间" align="center"> <template slot-scope="scope">{{Format(scope.row.loginTime)}}</template></el-table-column>
-                <el-table-column prop="date" label="登陆地点" align="center"> <template slot-scope="scope">{{scope.row.loginAddress}}</template></el-table-column>
+                <el-table-column prop="date" label="注册时间"> <template slot-scope="scope">{{Format(scope.row.createTime)}}</template></el-table-column>
+                <el-table-column prop="date" label="登陆时间"> <template slot-scope="scope">{{Format(scope.row.loginTime)}}</template></el-table-column>
+                <el-table-column prop="date" label="登陆地点"> <template slot-scope="scope">{{scope.row.loginAddress}}</template></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -151,8 +145,7 @@ export default {
             this.getData();
         },
         // 删除操作
-        handleDelete(index,row) {
-          console.log(row);
+        handleDelete(index, row) {
             // 二次确认删除
             this.$confirm('确定要删除吗？', '提示', {
                 type: 'warning'

@@ -28,12 +28,14 @@
 </template>
 
 <script>
+import * as axios from 'axios';
+import { login } from '@/api/globalurl';
 export default {
     data: function() {
         return {
             param: {
                 username: 'admin',
-                password: '123123',
+                password: '123456',
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -43,16 +45,31 @@ export default {
     },
     methods: {
         submitForm() {
+           const _this =this
             this.$refs.login.validate(valid => {
                 if (valid) {
-                    this.$message.success('登录成功');
-                    localStorage.setItem('ms_username', this.param.username);
-                    this.$router.push('/');
-                } else {
-                    this.$message.error('请输入账号和密码');
-                    console.log('error submit!!');
-                    return false;
-                }
+                    axios({
+                      method:'post',
+                      url:login,
+                      data:{
+                        'username':_this.param.username,
+                        'password':_this.param.password
+                      },
+                    }).then(function(res){
+                      if(200===res.data.code){
+                        _this.$message.success('登录成功');
+                        _this.$router.push('/');
+                        localStorage.setItem('username', _this.param.username);
+                        localStorage.setItem('Authorization',res.data.data.tokenHead+res.data.data.token)
+                      }else{
+                        _this.$message.success(res.data.msg);
+                      }
+                    });
+                  } else {
+                      this.$message.error('请输入账号和密码');
+                      console.log('error submit!!');
+                      return false;
+                  }
             });
         },
     },

@@ -4,19 +4,19 @@
             <el-col :span="8">
                 <el-card shadow="hover" class="mgb20" style="height:252px;">
                     <div class="user-info">
-                        <img src="../../assets/img/img.jpg" class="user-avator" alt />
+                        <img :src="icon" class="user-avator" alt />
                         <div class="user-info-cont">
-                            <div class="user-info-name">{{name}}</div>
-                            <div>{{role}}</div>
+                            <div class="user-info-name">{{username}}</div>
+                            <div>{{rolename}}</div>
                         </div>
                     </div>
                     <div class="user-info-list">
                         上次登录时间：
-                        <span>2019-11-01</span>
+                        <span>{{ Format(loginLastTime)}}</span>
                     </div>
                     <div class="user-info-list">
                         上次登录地点：
-                        <span>东莞</span>
+                        <span>{{loginAddress}}</span>
                     </div>
                 </el-card>
                 <el-card shadow="hover" style="height:252px;">
@@ -111,11 +111,17 @@
 
 <script>
 import Schart from 'vue-schart';
+import {getUmsInfo} from '@/api/globalurl'
+import {format_date,get} from '@/api/globalFunction'
 export default {
     name: 'dashboard',
     data() {
         return {
-            name: localStorage.getItem('ms_username'),
+            username: '',
+            loginAddress:'',
+            loginLastTime:'',
+            rolename:'',
+            icon:'',
             todoList: [
                 {
                     title: '今天要修复100个bug',
@@ -220,30 +226,37 @@ export default {
     components: {
         Schart
     },
-    computed: {
-        role() {
-            return this.name === 'admin' ? '超级管理员' : '普通用户';
-        }
+  /**  创建页面时加载一次，每次刷新都需要加载一次的 **/
+    created() {
+      this.getUserLoginInfo();
     },
-    // created() {
-    //     this.handleListener();
-    //     this.changeDate();
-    // },
-    // activated() {
-    //     this.handleListener();
-    // },
-    // deactivated() {
-    //     window.removeEventListener('resize', this.renderChart);
-    //     bus.$off('collapse', this.handleBus);
-    // },
+    activated() {
+
+    },
+    deactivated() {
+
+    },
     methods: {
-        changeDate() {
-            const now = new Date().getTime();
-            this.data.forEach((item, index) => {
-                const date = new Date(now - (6 - index) * 86400000);
-                item.name = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-            });
-        }
+      getUserLoginInfo(){
+        const _this =this
+         get(getUmsInfo).then(res=>{
+          if(res.code === 200) {
+             localStorage.setItem('icon',res.data.icon);
+             localStorage.setItem('loginAddress',res.data.loginAddress);
+             localStorage.setItem('rolename',res.data.rolename);
+             localStorage.setItem('loginLastTime',res.data.loginDate);
+             localStorage.setItem('username',res.data.username);
+             _this.icon = res.data.icon;
+             _this.loginAddress = res.data.loginAddress;
+             _this.rolename = res.data.rolename;
+             _this.loginLastTime = res.data.loginDate;
+             _this.username = res.data.username;
+          }
+        });
+      },
+      Format:function(time) {
+        return format_date(time);
+      },
         // handleListener() {
         //     bus.$on('collapse', this.handleBus);
         //     // 调用renderChart方法对图表进行重新渲染

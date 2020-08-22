@@ -36,8 +36,10 @@
             quillEditor
         },
         methods: {
-            onEditorChange({ html}) {
+            onEditorChange({ editor, html, text }) {
                 this.content = html;
+                console.log(editor);
+                console.log(text);
             },
             submit(){
                 console.log(this.content);
