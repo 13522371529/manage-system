@@ -10,12 +10,12 @@
         <div class="container">
 <!--          <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>-->
             <div class="handle-box">
-<!--                <el-button-->
-<!--                    type="primary"-->
-<!--                    icon="el-icon-delete"-->
-<!--                    class="handle-del mr10"-->
-<!--                    @click="delAllSelection"-->
-<!--                >批量删除</el-button>-->
+                <el-button
+                    type="primary"
+                    icon="el-icon-delete"
+                    class="handle-del mr10"
+                    @click="delAllSelection"
+                >批量删除</el-button>
                 <el-select v-model="query.status" placeholder="状态" class="handle-select mr10" @change="handleSearch">
                     <el-option key="0" label="全部" value=""></el-option>
                     <el-option key="1" label="禁用" value="0"></el-option>
@@ -52,12 +52,12 @@
                             icon="el-icon-edit"
                             @click="handleEdit(scope.$index, scope.row)"
                         >编辑</el-button>
-<!--                        <el-button-->
-<!--                            type="text"-->
-<!--                            icon="el-icon-delete"-->
-<!--                            class="red"-->
-<!--                            @click="handleDelete(scope.$index, scope.row)"-->
-<!--                        >删除</el-button>-->
+                        <el-button
+                            type="text"
+                            icon="el-icon-delete"
+                            class="red"
+                            @click="handleDelete(scope.$index, scope.row)"
+                        >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -81,12 +81,20 @@
           </el-select>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
+                <el-button type="primary" @click="updateEdit">确 定</el-button>
             </span>
         </el-dialog>
 
       <el-dialog title="新增" :visible.sync="addVisible" width="20%">
-        <el-select v-model="updateform.status" placeholder="状态" class="handle-select mr10">
+        <el-form ref="form" :model="form" label-width="70px">
+          <el-form-item label="角色名称">
+            <el-input v-model="addform.name"></el-input>
+          </el-form-item>
+          <el-form-item label="备注说明">
+            <el-input v-model="addform.description"></el-input>
+          </el-form-item>
+        </el-form>
+        <el-select v-model="addform.status" placeholder="状态" class="handle-select mr10">
           <el-option key="1" label="禁用" value="0"></el-option>
           <el-option key="2" label="启用" value="1"></el-option>
         </el-select>
@@ -99,7 +107,7 @@
 </template>
 
 <script>
-import {serachRoleList,updateUpmRoleStatus} from '@/api/globalurl'
+import {serachRoleList,updateUpmRoleStatus,addUpmRole,batchDelRole} from '@/api/globalurl'
 import { format_date, sendPost } from '@/api/globalFunction';
 export default {
     name: 'basetable',
@@ -117,6 +125,16 @@ export default {
             updateform:{
                 id:'',
                 status: '',
+                name: '',
+                description: '',
+            },
+            addform:{
+              status: '',
+              name: '',
+              description: '',
+            },
+            delform:{
+              ids: '',
             },
             tableData: [],
             multipleSelection: [],
@@ -140,6 +158,18 @@ export default {
                      this.pageTotal = res.data.total || 50;
                  });
         },
+      delumsRole:function(){
+        sendPost(batchDelRole,this.delform).then(res => {
+          if(res.code===200){
+            this.$message.success(res.msg);
+            this.editVisible = false;
+            this.getData();
+            this.delform.ids = '';
+          }else{
+            this.$message.error(res.msg);
+          }
+        });
+      },
 
       Format:function(time) {
         return format_date(time);
@@ -151,30 +181,37 @@ export default {
         },
         // 删除操作
         handleDelete(index, row) {
-            // 二次确认删除
-            this.$confirm('确定要删除吗？', '提示', {
-                type: 'warning'
-            })
-                .then(() => {
-                    this.$message.success('删除成功');
-                    this.tableData.splice(index, 1);
-                })
-                .catch(() => {});
+          this.$confirm('确定要删除吗？', '提示', {
+            type: 'warning'
+          }).then(() => {
+            this.idx = index;
+            this.form = row;
+            this.delform.ids = this.form.id;
+            this.delumsRole();
+          })
+              .catch(() => {});
         },
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
         delAllSelection() {
+          this.$confirm('确定要删除吗？', '提示', {
+            type: 'warning'
+          }).then(() => {
             const length = this.multipleSelection.length;
             let str = '';
             this.delList = this.delList.concat(this.multipleSelection);
             for (let i = 0; i < length; i++) {
-                str += this.multipleSelection[i].name + ' ';
+              str += this.multipleSelection[i].id + '-';
             }
-            this.$message.error(`删除了${str}`);
+            this.delform.ids = str;
             this.multipleSelection = [];
+            this.delumsRole();
+              })
+              .catch(() => {});
         },
+
         // 编辑操作
         handleEdit(index, row) {
             this.idx = index;
@@ -182,8 +219,8 @@ export default {
             this.updateform.status = this.form.status===0?'禁用':'启用';
             this.editVisible = true;
         },
-        // 保存编辑
-        saveEdit() {
+        // 修改
+        updateEdit() {
           this.updateform.id = this.form.id;
           sendPost(updateUpmRoleStatus,this.updateform).then(res => {
            if(res.code===200){
@@ -195,6 +232,23 @@ export default {
            }
           });
         },
+
+      // 新增角色
+        saveEdit() {
+          var _this = this;
+          sendPost(addUpmRole,this.addform).then(res => {
+            if(res.code===200){
+              this.$message.success(res.msg);
+              this.addVisible = false;
+              this.getData();
+              _this.addform.status='';
+              _this.addform.description='';
+              _this.addform.name='';
+            }else{
+              this.$message.error(res.msg);
+            }
+          });
+       },
         // 分页导航
         handlePageChange(val) {
             this.$set(this.query, 'startPage', val);

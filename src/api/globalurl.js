@@ -22,3 +22,18 @@ export let serachRoleList = url+'admin/upmRole/serachRoleList';
 
 /**  更新更新角色状态   **/
 export let updateUpmRoleStatus = url+'admin/upmRole/updateUpmRoleStatus';
+
+/**  添加角色   **/
+export let addUpmRole = url+'admin/upmRole/addUpmRole';
+
+/**  删除角色   **/
+export let batchDelRole = url+'admin/upmRole/batchDelRole';
+
+/**  资源列表   **/
+export let serachResourceList = url+'admin/upmResource/serachResourceList';
+
+/**  更新资源   **/
+export let updateUmsResource = url+'admin/upmResource/updateUmsResource';
+
+/**  添加资源   **/
+export let addUmsResource = url+'admin/upmResource/addUmsResource';
