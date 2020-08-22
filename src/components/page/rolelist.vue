@@ -236,6 +236,10 @@ export default {
       // 新增角色
         saveEdit() {
           var _this = this;
+          if(this.addform.name===''|| this.addform.status===''){
+            this.$message.error("请输入合法参数!");
+            return;
+          }
           sendPost(addUpmRole,this.addform).then(res => {
             if(res.code===200){
               this.$message.success(res.msg);
