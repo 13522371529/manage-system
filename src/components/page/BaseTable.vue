@@ -22,6 +22,7 @@
                 </el-select>
                 <el-input v-model="query.username" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+              <el-button type="primary" icon="el-icon-plus" @click="addRole">新增</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -90,6 +91,7 @@
             <el-option key="1" label="禁用" value="0"></el-option>
             <el-option key="2" label="启用" value="1"></el-option>
           </el-select>
+
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="saveEdit">确 定</el-button>

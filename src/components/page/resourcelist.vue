@@ -15,13 +15,14 @@
 <!--                    class="handle-del mr10"-->
 <!--                    @click="delAllSelection"-->
 <!--                >批量删除</el-button>-->
-                <el-select v-model="query.status" placeholder="状态" class="handle-select mr10" @change="handleSearch">
+                <el-select v-model="query.status" placeholder="资源类别" class="handle-select mr10" @change="handleSearch">
                     <el-option key="0" label="全部" value=""></el-option>
                     <el-option key="1" label="禁用" value="0"></el-option>
                     <el-option key="2" label="启用" value="1"></el-option>
                 </el-select>
-                <el-input v-model="query.username" placeholder="用户名" class="handle-input mr10"></el-input>
+                <el-input v-model="query.name" placeholder="资源名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+              <el-button type="primary" icon="el-icon-plus" @click="addRole">新增</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -33,29 +34,10 @@
             >
                 <el-table-column type="selection" width="55" align="center"> </el-table-column>
                 <el-table-column prop="id" label="ID" width="55" align="center"><template slot-scope="scope">{{scope.row.id}}</template></el-table-column>
-                <el-table-column prop="useername" label="用户名"><template slot-scope="scope">{{scope.row.username}}</template></el-table-column>
-                <el-table-column label="昵称">
-                    <template slot-scope="scope">{{scope.row.nickName}}</template>
-                </el-table-column>
-                <el-table-column label="头像(查看大图)" align="center">
-                    <template slot-scope="scope">
-                        <el-image
-                            class="table-td-thumb"
-                            :src="scope.row.icon"
-                            :preview-src-list="[scope.row.icon]"
-                        ></el-image>
-                    </template>
-                </el-table-column>
-<!--                <el-table-column prop="status" label="状态"></el-table-column>-->
-                <el-table-column label="状态" align="center">
-                    <template slot-scope="scope">
-                       {{scope.row.status===0?'禁用':'启用'}}
-                    </template>
-                </el-table-column>
-
-                <el-table-column prop="date" label="注册时间"> <template slot-scope="scope">{{Format(scope.row.createTime)}}</template></el-table-column>
-                <el-table-column prop="date" label="登陆时间"> <template slot-scope="scope">{{Format(scope.row.loginTime)}}</template></el-table-column>
-                <el-table-column prop="date" label="登陆地点"> <template slot-scope="scope">{{scope.row.loginAddress}}</template></el-table-column>
+              <el-table-column prop="date" label="资源路径"> <template slot-scope="scope">{{scope.row.url}}</template></el-table-column>
+                <el-table-column prop="date" label="资源类别"> <template slot-scope="scope">{{scope.row.categoryId}}</template></el-table-column>
+                <el-table-column prop="date" label="资源名称"> <template slot-scope="scope">{{scope.row.name}}</template></el-table-column>
+              <el-table-column prop="date" label="创建时间"> <template slot-scope="scope">{{Format(scope.row.createTime)}}</template></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -99,7 +81,7 @@
 </template>
 
 <script>
-import {serachList,updateUpmAdminStatus} from '@/api/globalurl'
+import {serachResourceList,updateUmsResource} from '@/api/globalurl'
 import { format_date, sendPost } from '@/api/globalFunction';
 export default {
     name: 'basetable',
@@ -107,10 +89,7 @@ export default {
         return {
             query: {
                 id:'',
-                username: '',
-                email: '',
-                nickName: '',
-                status: '',
+                name: '',
                 startTime: '',
                 endTime: '',
                 startPage: 1,
@@ -136,7 +115,7 @@ export default {
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-          sendPost(serachList,this.query).then(res => {
+          sendPost(serachResourceList,this.query).then(res => {
                      this.tableData = res.data.rows;
                      this.pageTotal = res.data.total || 50;
                  });
@@ -152,6 +131,7 @@ export default {
         },
         // 删除操作
         handleDelete(index, row) {
+          console.log(row)
             // 二次确认删除
             this.$confirm('确定要删除吗？', '提示', {
                 type: 'warning'
@@ -186,7 +166,7 @@ export default {
         // 保存编辑
         saveEdit() {
           this.updateform.id = this.form.id;
-          sendPost(updateUpmAdminStatus,this.updateform).then(res => {
+          sendPost(updateUmsResource,this.updateform).then(res => {
            if(res.code===200){
              this.$message.success(res.msg);
              this.editVisible = false;
