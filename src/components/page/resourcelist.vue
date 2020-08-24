@@ -74,7 +74,7 @@
           </el-select>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
+                <el-button type="primary" @click="updateEdit">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import {serachResourceList,updateUmsResource} from '@/api/globalurl'
+import {addUpmRole, serachResourceList, updateUmsResource} from '@/api/globalurl'
 import { format_date, sendPost } from '@/api/globalFunction';
 export default {
     name: 'basetable',
@@ -189,7 +189,7 @@ export default {
             this.editVisible = true;
         },
         // 保存编辑
-        saveEdit() {
+        updateEdit() {
           this.updateform.id = this.form.id;
           sendPost(updateUmsResource,this.updateform).then(res => {
            if(res.code===200){
@@ -208,7 +208,34 @@ export default {
         },
       addResource(){
         this.addVisible = true;
-      }
+      },// 新增角色
+      saveEdit() {
+        var _this = this;
+        if(this.addform.name===''){
+          this.$message.error("请输入资源名称!");
+          return;
+        }
+        if(this.addform.url===''){
+          this.$message.error("请输入资源地址!");
+          return;
+        }
+        if(this.addform.categoryId===''){
+          this.$message.error("请输入资源类别!");
+          return;
+        }
+        sendPost(addUpmRole,this.addform).then(res => {
+          if(res.code===200){
+            this.$message.success(res.msg);
+            this.addVisible = false;
+            this.getData();
+            _this.addform.status='';
+            _this.addform.description='';
+            _this.addform.name='';
+          }else{
+            this.$message.error(res.msg);
+          }
+        });
+      },
     }
 };
 </script>
