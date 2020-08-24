@@ -22,7 +22,7 @@
                 </el-select>
                 <el-input v-model="query.name" placeholder="资源名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-              <el-button type="primary" icon="el-icon-plus" @click="addRole">新增</el-button>
+              <el-button type="primary" icon="el-icon-plus" @click="addResource">新增</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -77,6 +77,24 @@
                 <el-button type="primary" @click="saveEdit">确 定</el-button>
             </span>
         </el-dialog>
+
+      <el-dialog title="新增" :visible.sync="addVisible" width="20%">
+        <el-form ref="form" :model="form" label-width="70px">
+          <el-form-item label="资源名称">
+            <el-input v-model="addform.name"></el-input>
+          </el-form-item>
+          <el-form-item label="资源说明">
+            <el-input v-model="addform.description"></el-input>
+          </el-form-item>
+          <el-form-item label="资源路径">
+            <el-input v-model="addform.url"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveEdit">确 定</el-button>
+            </span>
+      </el-dialog>
     </div>
 </template>
 
@@ -99,10 +117,17 @@ export default {
                 id:'',
                 status: '',
             },
+            addform:{
+              url: '',
+              name: '',
+              description: '',
+              categoryId:'',
+            },
             tableData: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
+            addVisible: false,
             pageTotal: 0,
             form: {},
             idx: -1,
@@ -180,7 +205,10 @@ export default {
         handlePageChange(val) {
             this.$set(this.query, 'startPage', val);
             this.getData();
-        }
+        },
+      addResource(){
+        this.addVisible = true;
+      }
     }
 };
 </script>
