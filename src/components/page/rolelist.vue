@@ -93,11 +93,14 @@
           <el-form-item label="备注说明">
             <el-input v-model="addform.description"></el-input>
           </el-form-item>
+          <el-form-item label="状态">
+         <el-select v-model="addform.status" placeholder="状态" class="handle-select mr10">
+           <el-option key="1" label="禁用" value="0"></el-option>
+           <el-option key="2" label="启用" value="1"></el-option>
+         </el-select>
+          </el-form-item>
         </el-form>
-        <el-select v-model="addform.status" placeholder="状态" class="handle-select mr10">
-          <el-option key="1" label="禁用" value="0"></el-option>
-          <el-option key="2" label="启用" value="1"></el-option>
-        </el-select>
+
         <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="saveEdit">确 定</el-button>
