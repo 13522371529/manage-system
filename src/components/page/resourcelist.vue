@@ -9,16 +9,15 @@
         </div>
         <div class="container">
             <div class="handle-box">
-<!--                <el-button-->
-<!--                    type="primary"-->
-<!--                    icon="el-icon-delete"-->
-<!--                    class="handle-del mr10"-->
-<!--                    @click="delAllSelection"-->
-<!--                >批量删除</el-button>-->
-                <el-select v-model="query.status" placeholder="资源类别" class="handle-select mr10" @change="handleSearch">
-                    <el-option key="0" label="全部" value=""></el-option>
-                    <el-option key="1" label="禁用" value="0"></el-option>
-                    <el-option key="2" label="启用" value="1"></el-option>
+                <el-button
+                    type="primary"
+                    icon="el-icon-delete"
+                    class="handle-del mr10"
+                    @click="delAllSelection"
+                >批量删除</el-button>
+                <el-select v-model="query.categoryId" placeholder="资源类别" class="handle-select mr10" >
+                  <el-option key="0" label="全部" value=""></el-option>
+                  <el-option v-for="item in categoryData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="资源名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
@@ -45,12 +44,12 @@
                             icon="el-icon-edit"
                             @click="handleEdit(scope.$index, scope.row)"
                         >编辑</el-button>
-<!--                        <el-button-->
-<!--                            type="text"-->
-<!--                            icon="el-icon-delete"-->
-<!--                            class="red"-->
-<!--                            @click="handleDelete(scope.$index, scope.row)"-->
-<!--                        >删除</el-button>-->
+                        <el-button
+                            type="text"
+                            icon="el-icon-delete"
+                            class="red"
+                            @click="handleDelete(scope.$index, scope.row)"
+                        >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -67,7 +66,7 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="10%">
+        <el-dialog title="编辑" :visible.sync="editVisible" width="15%">
           <el-select v-model="updateform.status" placeholder="状态" class="handle-select mr10">
             <el-option key="1" label="禁用" value="0"></el-option>
             <el-option key="2" label="启用" value="1"></el-option>
@@ -78,8 +77,14 @@
             </span>
         </el-dialog>
 
-      <el-dialog title="新增" :visible.sync="addVisible" width="20%">
+      <el-dialog title="新增" :visible.sync="addVisible" width="30%">
         <el-form ref="form" :model="form" label-width="70px">
+
+          <el-form-item label="资源类别">
+            <el-select v-model="addform.categoryId" placeholder="请选择" class="handle-select mr10" >
+              <el-option v-for="item in categoryData" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="资源名称">
             <el-input v-model="addform.name"></el-input>
           </el-form-item>
@@ -99,8 +104,8 @@
 </template>
 
 <script>
-import {addUpmRole, serachResourceList, updateUmsResource} from '@/api/globalurl'
-import { format_date, sendPost } from '@/api/globalFunction';
+import api from '@/api/globalurl'
+import {format_date, get, sendPost} from '@/api/globalFunction';
 export default {
     name: 'basetable',
     data() {
@@ -110,6 +115,7 @@ export default {
                 name: '',
                 startTime: '',
                 endTime: '',
+                categoryId:'',
                 startPage: 1,
                 pageSize: 10
             },
@@ -117,12 +123,16 @@ export default {
                 id:'',
                 status: '',
             },
+            delform:{
+              ids: '',
+            },
             addform:{
               url: '',
               name: '',
               description: '',
               categoryId:'',
             },
+            categoryData:[],
             tableData: [],
             multipleSelection: [],
             delList: [],
@@ -136,51 +146,79 @@ export default {
     },
     created() {
         this.getData();
+        this.getAllCategory();
     },
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-          sendPost(serachResourceList,this.query).then(res => {
+          sendPost(api.serachResourceList,this.query).then(res => {
                      this.tableData = res.data.rows;
                      this.pageTotal = res.data.total || 50;
                  });
         },
 
-      Format:function(time) {
-        return format_date(time);
-      },
+        // 资源类别
+        getAllCategory(){
+          get(api.getAllResourceCategoory).then(res => {
+            this.categoryData = res.data;
+
+           // this.pageTotal = res.data.total || 50;
+          });
+        },
+        // 批量删除
+        delumsResource:function(){
+          sendPost(api.batchDelResource,this.delform).then(res => {
+            if(res.code===200){
+              this.$message.success(res.msg);
+              this.editVisible = false;
+              this.getData();
+              this.delform.ids = '';
+            }else{
+              this.$message.error(res.msg);
+            }
+          });
+        },
+
+        Format:function(time) {
+          return format_date(time);
+        },
         // 触发搜索按钮
         handleSearch() {
             this.$set(this.query, 'startPage', 1);
             this.getData();
         },
         // 删除操作
-        handleDelete(index, row) {
-          console.log(row)
-            // 二次确认删除
-            this.$confirm('确定要删除吗？', '提示', {
-                type: 'warning'
-            })
-                .then(() => {
-                    this.$message.success('删除成功');
-                    this.tableData.splice(index, 1);
-                })
-                .catch(() => {});
-        },
+      handleDelete(index, row) {
+        this.$confirm('确定要删除吗？', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.idx = index;
+          this.form = row;
+          this.delform.ids = this.form.id;
+          this.delumsResource();
+        })
+            .catch(() => {});
+      },
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
-        delAllSelection() {
-            const length = this.multipleSelection.length;
-            let str = '';
-            this.delList = this.delList.concat(this.multipleSelection);
-            for (let i = 0; i < length; i++) {
-                str += this.multipleSelection[i].name + ' ';
-            }
-            this.$message.error(`删除了${str}`);
-            this.multipleSelection = [];
-        },
+      delAllSelection() {
+        this.$confirm('确定要删除吗？', '提示', {
+          type: 'warning'
+        }).then(() => {
+          const length = this.multipleSelection.length;
+          let str = '';
+          this.delList = this.delList.concat(this.multipleSelection);
+          for (let i = 0; i < length; i++) {
+            str += this.multipleSelection[i].id + '-';
+          }
+          this.delform.ids = str;
+          this.multipleSelection = [];
+          this.delumsResource();
+        })
+            .catch(() => {});
+      },
         // 编辑操作
         handleEdit(index, row) {
             this.idx = index;
@@ -191,7 +229,7 @@ export default {
         // 保存编辑
         updateEdit() {
           this.updateform.id = this.form.id;
-          sendPost(updateUmsResource,this.updateform).then(res => {
+          sendPost(api.updateUmsResource,this.updateform).then(res => {
            if(res.code===200){
              this.$message.success(res.msg);
              this.editVisible = false;
@@ -208,7 +246,10 @@ export default {
         },
       addResource(){
         this.addVisible = true;
-      },// 新增角色
+        this.addform.description ='';
+        this.addform.name = '';
+        this.addform.url = '';
+      },// 新增资源
       saveEdit() {
         var _this = this;
         if(this.addform.name===''){
@@ -220,10 +261,10 @@ export default {
           return;
         }
         if(this.addform.categoryId===''){
-          this.$message.error("请输入资源类别!");
+          this.$message.error("请选择资源类别!");
           return;
         }
-        sendPost(addUpmRole,this.addform).then(res => {
+        sendPost(api.addUmsResource,this.addform).then(res => {
           if(res.code===200){
             this.$message.success(res.msg);
             this.addVisible = false;
