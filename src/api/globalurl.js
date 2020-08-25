@@ -1,39 +1,49 @@
+class api{
+    constructor() {
+        var url = 'http://localhost:7841/';
 
-//let url = 'https://www.pengjiayuan.top/';
+        /** 登陆接口 **/
+        this.login  = url+'admin/upmAdmin/login';
 
-//let url = 'http://192.168.31.101:7841/';
+        /** 上次登陆时间、地点、角色名称、用户名 **/
+        this.getUmsInfo = url+'admin/upmAdmin/getUmsLogInfo';
 
-let url = 'http://localhost:7841/';
+        /**  搜索管理员列表   **/
+        this.serachList = url+'admin/upmAdmin/serachList';
 
-/** 登陆接口 **/
-export let login    = url+'admin/upmAdmin/login';
+        /**  更新管理员状态   **/
+        this.updateUpmAdminStatus = url+'admin/upmAdmin/updateUpmAdminStatus';
 
-/** 上次登陆时间、地点、角色名称、用户名 **/
-export let getUmsInfo = url+'admin/upmAdmin/getUmsLogInfo';
+        /**  角色列表   **/
+        this.serachRoleList = url+'admin/upmRole/serachRoleList';
 
-/**  搜索管理员列表   **/
-export let serachList = url+'admin/upmAdmin/serachList';
+        /**  更新更新角色状态   **/
+        this.updateUpmRoleStatus = url+'admin/upmRole/updateUpmRoleStatus';
 
-/**  更新管理员状态   **/
-export let updateUpmAdminStatus = url+'admin/upmAdmin/updateUpmAdminStatus';
+        /**  添加角色   **/
+        this.addUpmRole = url+'admin/upmRole/addUpmRole';
 
-/**  角色列表   **/
-export let serachRoleList = url+'admin/upmRole/serachRoleList';
+        /**  添加角色   **/
+        this.addUpmRole = url+'admin/upmRole/addUpmRole';
 
-/**  更新更新角色状态   **/
-export let updateUpmRoleStatus = url+'admin/upmRole/updateUpmRoleStatus';
+        /**  删除角色   **/
+        this.batchDelRole = url+'admin/upmRole/batchDelRole';
 
-/**  添加角色   **/
-export let addUpmRole = url+'admin/upmRole/addUpmRole';
+        /**  资源列表   **/
+        this.serachResourceList = url+'admin/upmResource/serachResourceList';
 
-/**  删除角色   **/
-export let batchDelRole = url+'admin/upmRole/batchDelRole';
+        /**  更新资源   **/
+        this.updateUmsResource = url+'admin/upmResource/updateUmsResource';
 
-/**  资源列表   **/
-export let serachResourceList = url+'admin/upmResource/serachResourceList';
+        /**  添加资源   **/
+        this.addUmsResource = url+'admin/upmResource/addUmsResource';
 
-/**  更新资源   **/
-export let updateUmsResource = url+'admin/upmResource/updateUmsResource';
+        /**  删除资源   **/
+        this.batchDelResource = url+'admin/upmResource/batchDelResource';
 
-/**  添加资源   **/
-export let addUmsResource = url+'admin/upmResource/addUmsResource';
+        /**  获取所有的资源类别   **/
+        this.getAllResourceCategoory = url+'admin/upmResource/getAllResourceCategoory';
+    }
+}
+
+export default new api;
