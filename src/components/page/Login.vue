@@ -29,7 +29,7 @@
 
 <script>
 import * as axios from 'axios';
-import { login } from '@/api/globalurl';
+import api from '@/api/globalurl'
 export default {
     data: function() {
         return {
@@ -50,7 +50,7 @@ export default {
                 if (valid) {
                     axios({
                       method:'post',
-                      url:login,
+                      url:api.login,
                       data:{
                         'username':_this.param.username,
                         'password':_this.param.password
