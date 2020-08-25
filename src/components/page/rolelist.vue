@@ -8,7 +8,6 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-<!--          <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>-->
             <div class="handle-box">
                 <el-button
                     type="primary"
@@ -45,7 +44,7 @@
                        {{scope.row.status===0?'禁用':'启用'}}
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作" width="180" >
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -58,6 +57,12 @@
                             class="red"
                             @click="handleDelete(scope.$index, scope.row)"
                         >删除</el-button>
+                      <el-button
+                          type="text"
+                          icon="el-icon-group"
+                          class="red"
+                          @click="handleEditResource(scope.$index, scope.row)"
+                      >分配资源</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -74,11 +79,17 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="10%">
-          <el-select v-model="updateform.status" placeholder="状态" class="handle-select mr10">
-            <el-option key="1" label="禁用" value="0"></el-option>
-            <el-option key="2" label="启用" value="1"></el-option>
-          </el-select>
+        <el-dialog title="编辑角色" :visible.sync="editVisible" width="15%">
+          <el-form ref="form" :model="form" label-width="70px">
+            <el-form-item label="角色账户">
+              <el-select v-model="updateform.status" placeholder="角色状态" class="handle-select mr10">
+                <el-option key="1" label="禁用" value="0"></el-option>
+                <el-option key="2" label="启用" value="1"></el-option>
+              </el-select>
+            </el-form-item>
+
+          </el-form>
+
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="updateEdit">确 定</el-button>
@@ -106,12 +117,39 @@
                 <el-button type="primary" @click="saveEdit">确 定</el-button>
             </span>
       </el-dialog>
+
+
+
+      <el-dialog title="分配资源" :visible.sync="editResource" width="20%" >
+        <el-form ref="form" :model="form" label-width="70px">
+<!--          <el-form-item label="角色名称">-->
+<!--            <el-input v-model="addform.name"></el-input>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="备注说明">-->
+<!--            <el-input v-model="addform.description"></el-input>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="状态">-->
+<!--            <el-select v-model="addform.status" placeholder="状态" class="handle-select mr10">-->
+<!--              <el-option key="1" label="禁用" value="0"></el-option>-->
+<!--              <el-option key="2" label="启用" value="1"></el-option>-->
+<!--            </el-select>-->
+<!--          </el-form-item>-->
+          <ul>
+            <li v-for="(item, index) in course" :key="index">{{item}}</li>
+          </ul>
+        </el-form>
+
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveEdit">确 定</el-button>
+            </span>
+      </el-dialog>
     </div>
 </template>
 
 <script>
 import api from '@/api/globalurl'
-import { format_date, sendPost } from '@/api/globalFunction';
+import {format_date,sendPost} from '@/api/globalFunction';
 export default {
     name: 'basetable',
     data() {
@@ -139,11 +177,13 @@ export default {
             delform:{
               ids: '',
             },
+            categoryData:[],
             tableData: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
             addVisible: false,
+            editResource: false,
             pageTotal: 0,
             form: {},
             idx: -1,
@@ -152,6 +192,7 @@ export default {
     },
     created() {
         this.getData();
+        this.getResourceList();
     },
     methods: {
         // 获取 easy-mock 的模拟数据
@@ -161,6 +202,13 @@ export default {
                      this.pageTotal = res.data.total || 50;
                  });
         },
+      // 资源类别
+      getResourceList(){
+        sendPost(api.serachResourceList,this.query).then(res => {
+          this.tableData = res.data.rows;
+          this.pageTotal = res.data.total || 50;
+        });
+      },
       delumsRole:function(){
         sendPost(api.batchDelRole,this.delform).then(res => {
           if(res.code===200){
@@ -263,6 +311,11 @@ export default {
         },
         addRole(){
           this.addVisible = true;
+        },
+        // 分配资源
+        handleEditResource(){
+
+          this.editResource = true;
         }
     }
 };

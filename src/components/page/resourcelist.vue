@@ -66,7 +66,7 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
+        <el-dialog title="编辑资源" :visible.sync="editVisible" width="30%" >
           <el-form ref="form" :model="form" label-width="70px">
             <el-form-item label="资源类别">
               <el-select v-model="updateform.categoryId" placeholder="请选择" class="handle-select mr10" >
@@ -90,7 +90,7 @@
             </span>
         </el-dialog>
 
-      <el-dialog title="新增" :visible.sync="addVisible" width="30%">
+      <el-dialog title="新增资源" :visible.sync="addVisible" width="30%">
         <el-form ref="form" :model="form" label-width="70px">
 
           <el-form-item label="资源类别">
@@ -177,8 +177,6 @@ export default {
         getAllCategory(){
           get(api.getAllResourceCategoory).then(res => {
             this.categoryData = res.data;
-
-           // this.pageTotal = res.data.total || 50;
           });
         },
         // 批量删除
@@ -212,6 +210,7 @@ export default {
           this.form = row;
           this.delform.ids = this.form.id;
           this.delumsResource();
+
         })
             .catch(() => {});
       },

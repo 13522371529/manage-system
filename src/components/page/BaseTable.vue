@@ -87,7 +87,7 @@
 
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="10%">
-          <el-select v-model="updateform.status" placeholder="状态" class="handle-select mr10">
+          <el-select v-model="updateform.status" placeholder="账户状态" class="handle-select mr10">
             <el-option key="1" label="禁用" value="0"></el-option>
             <el-option key="2" label="启用" value="1"></el-option>
           </el-select>
