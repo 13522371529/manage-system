@@ -1,6 +1,8 @@
 class api{
     constructor() {
-        var url = 'http://localhost:7841/';
+
+        var url = 'https://www.pengjiayuan.top/';
+        //var url = 'http://localhost:7841/';
 
         /** 登陆接口 **/
         this.login  = url+'admin/upmAdmin/login';
