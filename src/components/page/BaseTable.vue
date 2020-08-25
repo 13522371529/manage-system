@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import {serachList,updateUpmAdminStatus} from '@/api/globalurl'
+import api from '@/api/globalurl'
 import { format_date, sendPost } from '@/api/globalFunction';
 export default {
     name: 'basetable',
@@ -138,7 +138,7 @@ export default {
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-          sendPost(serachList,this.query).then(res => {
+          sendPost(api.serachList,this.query).then(res => {
                      this.tableData = res.data.rows;
                      this.pageTotal = res.data.total || 50;
                  });
@@ -189,7 +189,7 @@ export default {
         // 保存编辑
         saveEdit() {
           this.updateform.id = this.form.id;
-          sendPost(updateUpmAdminStatus,this.updateform).then(res => {
+          sendPost(api.updateUpmAdminStatus,this.updateform).then(res => {
            if(res.code===200){
              this.$message.success(res.msg);
              this.editVisible = false;

@@ -111,7 +111,7 @@
 
 <script>
 import Schart from 'vue-schart';
-import {getUmsInfo} from '@/api/globalurl'
+import api from '@/api/globalurl'
 import {format_date,get} from '@/api/globalFunction'
 export default {
     name: 'dashboard',
@@ -239,7 +239,7 @@ export default {
     methods: {
       getUserLoginInfo(){
         const _this =this
-         get(getUmsInfo).then(res=>{
+         get(api.getUmsInfo).then(res=>{
           if(res.code === 200) {
              localStorage.setItem('icon',res.data.icon);
              localStorage.setItem('loginAddress',res.data.loginAddress);

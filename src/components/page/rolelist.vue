@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import {serachRoleList,updateUpmRoleStatus,addUpmRole,batchDelRole} from '@/api/globalurl'
+import api from '@/api/globalurl'
 import { format_date, sendPost } from '@/api/globalFunction';
 export default {
     name: 'basetable',
@@ -153,13 +153,13 @@ export default {
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-          sendPost(serachRoleList,this.query).then(res => {
+          sendPost(api.serachRoleList,this.query).then(res => {
                      this.tableData = res.data.rows;
                      this.pageTotal = res.data.total || 50;
                  });
         },
       delumsRole:function(){
-        sendPost(batchDelRole,this.delform).then(res => {
+        sendPost(api.batchDelRole,this.delform).then(res => {
           if(res.code===200){
             this.$message.success(res.msg);
             this.editVisible = false;
@@ -222,7 +222,7 @@ export default {
         // 修改
         updateEdit() {
           this.updateform.id = this.form.id;
-          sendPost(updateUpmRoleStatus,this.updateform).then(res => {
+          sendPost(api.updateUpmRoleStatus,this.updateform).then(res => {
            if(res.code===200){
              this.$message.success(res.msg);
              this.editVisible = false;
@@ -240,7 +240,7 @@ export default {
             this.$message.error("请输入合法参数!");
             return;
           }
-          sendPost(addUpmRole,this.addform).then(res => {
+          sendPost(api.addUpmRole,this.addform).then(res => {
             if(res.code===200){
               this.$message.success(res.msg);
               this.addVisible = false;
