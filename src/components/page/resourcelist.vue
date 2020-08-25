@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 管理列表
+                    <i class="el-icon-lx-cascades"></i> 资源管理列表
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -16,7 +16,7 @@
                     @click="delAllSelection"
                 >批量删除</el-button>
                 <el-select v-model="query.categoryId" placeholder="资源类别" class="handle-select mr10" >
-                  <el-option key="0" label="全部" value=""></el-option>
+                  <el-option key="0" label="全部类别" value=""></el-option>
                   <el-option v-for="item in categoryData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="资源名称" class="handle-input mr10"></el-input>
@@ -29,14 +29,14 @@
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
-                @selection-change="handleSelectionChange"
-            >
+                @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"> </el-table-column>
                 <el-table-column prop="id" label="ID" width="55" align="center"><template slot-scope="scope">{{scope.row.id}}</template></el-table-column>
-              <el-table-column prop="date" label="资源路径"> <template slot-scope="scope">{{scope.row.url}}</template></el-table-column>
                 <el-table-column prop="date" label="资源类别"> <template slot-scope="scope">{{scope.row.categoryId}}</template></el-table-column>
                 <el-table-column prop="date" label="资源名称"> <template slot-scope="scope">{{scope.row.name}}</template></el-table-column>
-              <el-table-column prop="date" label="创建时间"> <template slot-scope="scope">{{Format(scope.row.createTime)}}</template></el-table-column>
+                <el-table-column prop="date" label="资源路径"> <template slot-scope="scope">{{scope.row.url}}</template></el-table-column>
+                <el-table-column prop="date" label="资源说明"> <template slot-scope="scope">{{scope.row.description}}</template></el-table-column>
+                <el-table-column prop="date" label="创建时间"> <template slot-scope="scope">{{Format(scope.row.createTime)}}</template></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -66,12 +66,25 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="15%">
-          <el-select v-model="updateform.status" placeholder="状态" class="handle-select mr10">
-            <el-option key="1" label="禁用" value="0"></el-option>
-            <el-option key="2" label="启用" value="1"></el-option>
-          </el-select>
-            <span slot="footer" class="dialog-footer">
+        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
+          <el-form ref="form" :model="form" label-width="70px">
+            <el-form-item label="资源类别">
+              <el-select v-model="updateform.categoryId" placeholder="请选择" class="handle-select mr10" >
+                <el-option v-for="item in categoryData" :key="item.id" :label="item.name" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="资源名称">
+              <el-input v-model="updateform.name"></el-input>
+            </el-form-item>
+            <el-form-item label="资源说明">
+              <el-input v-model="updateform.description"></el-input>
+            </el-form-item>
+            <el-form-item label="资源路径">
+              <el-input v-model="updateform.url"></el-input>
+            </el-form-item>
+
+          </el-form>
+          <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="updateEdit">确 定</el-button>
             </span>
@@ -121,7 +134,10 @@ export default {
             },
             updateform:{
                 id:'',
-                status: '',
+                url: '',
+                name: '',
+                description: '',
+                categoryId:'',
             },
             delform:{
               ids: '',
@@ -223,7 +239,10 @@ export default {
         handleEdit(index, row) {
             this.idx = index;
             this.form = row;
-            this.updateform.status = this.form.status===0?'禁用':'启用';
+            this.updateform.url = row.url;
+            this.updateform.categoryId = row.categoryId;
+            this.updateform.description = row.description;
+            this.updateform.name = row.name;
             this.editVisible = true;
         },
         // 保存编辑
