@@ -1,8 +1,8 @@
 class api{
     constructor() {
 
-        var url = 'https://www.pengjiayuan.top/';
-        //var url = 'http://localhost:7841/';
+        //var url = 'https://www.pengjiayuan.top/';
+        var url = 'http://localhost:7841/';
 
         /** 登陆接口 **/
         this.login  = url+'admin/upmAdmin/login';
@@ -25,8 +25,8 @@ class api{
         /**  添加角色   **/
         this.addUpmRole = url+'admin/upmRole/addUpmRole';
 
-        /**  添加角色   **/
-        this.addUpmRole = url+'admin/upmRole/addUpmRole';
+        /**  添加角色资源   **/
+        this.addUmsRoleResource = url+'admin/upmResource/addUmsRoleResource';
 
         /**  删除角色   **/
         this.batchDelRole = url+'admin/upmRole/batchDelRole';

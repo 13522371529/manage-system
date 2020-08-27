@@ -44,7 +44,7 @@
                        {{scope.row.status===0?'禁用':'启用'}}
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" >
+                <el-table-column label="操作" width="240" >
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -120,28 +120,18 @@
 
 
 
-      <el-dialog title="分配资源" :visible.sync="editResource" width="20%" >
+      <el-dialog title="分配资源" :visible.sync="editResource" width="30%" >
         <el-form ref="form" :model="form" label-width="70px">
-<!--          <el-form-item label="角色名称">-->
-<!--            <el-input v-model="addform.name"></el-input>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="备注说明">-->
-<!--            <el-input v-model="addform.description"></el-input>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="状态">-->
-<!--            <el-select v-model="addform.status" placeholder="状态" class="handle-select mr10">-->
-<!--              <el-option key="1" label="禁用" value="0"></el-option>-->
-<!--              <el-option key="2" label="启用" value="1"></el-option>-->
-<!--            </el-select>-->
-<!--          </el-form-item>-->
-          <ul>
-            <li v-for="(item, index) in course" :key="index">{{item}}</li>
-          </ul>
-        </el-form>
+          <el-form-item label="" required>
+              <el-checkbox-group v-model="resourceList" >
+                <el-checkbox v-for="(item) in categoryData"    :label="item.id" :key="item.id" >{{item.name}}</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-form>
 
         <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
+                <el-button type="primary" @click="saveResource">确 定</el-button>
             </span>
       </el-dialog>
     </div>
@@ -163,6 +153,12 @@ export default {
                 startPage: 1,
                 pageSize: 10
             },
+            resourceList:[],
+            roleResourceform: {
+              resourceId:'',
+              roleId:'',
+            },
+            roleform:{},
             updateform:{
                 id:'',
                 status: '',
@@ -205,8 +201,7 @@ export default {
       // 资源类别
       getResourceList(){
         sendPost(api.serachResourceList,this.query).then(res => {
-          this.tableData = res.data.rows;
-          this.pageTotal = res.data.total || 50;
+          this.categoryData = res.data.rows;
         });
       },
       delumsRole:function(){
@@ -284,7 +279,7 @@ export default {
           });
         },
 
-      // 新增角色
+        // 新增角色
         saveEdit() {
           var _this = this;
           if(this.addform.name===''|| this.addform.status===''){
@@ -304,6 +299,26 @@ export default {
             }
           });
        },
+      //保存角色资源信息
+      saveResource() {
+        //var _this = this;
+        let str = '';
+
+        this.resourceList.forEach(function(value){
+          str += value +","
+        });
+        this.roleResourceform.resourceId = str;
+        sendPost(api.addUmsRoleResource,this.roleResourceform).then(res => {
+          if(res.code===200){
+            this.$message.success(res.msg);
+            this.editResource = false;
+            this.resourceList =[];
+          }else{
+            this.$message.error(res.msg);
+          }
+        });
+
+      },
         // 分页导航
         handlePageChange(val) {
             this.$set(this.query, 'startPage', val);
@@ -313,9 +328,10 @@ export default {
           this.addVisible = true;
         },
         // 分配资源
-        handleEditResource(){
-
-          this.editResource = true;
+        handleEditResource(index,row){
+           this.roleform = row;
+           this.roleResourceform.roleId = this.roleform.id;
+           this.editResource = true;
         }
     }
 };
