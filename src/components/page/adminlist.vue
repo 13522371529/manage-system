@@ -70,6 +70,12 @@
 <!--                            class="red"-->
 <!--                            @click="handleDelete(scope.$index, scope.row)"-->
 <!--                        >删除</el-button>-->
+                      <el-button
+                          type="text"
+                          icon="el-icon-delete"
+                          class="red"
+                          @click="resetPassword(scope.$index, scope.row)"
+                      >重置密码</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -86,17 +92,32 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="10%">
-          <el-select v-model="updateform.status" placeholder="账户状态" class="handle-select mr10">
-            <el-option key="1" label="禁用" value="0"></el-option>
-            <el-option key="2" label="启用" value="1"></el-option>
-          </el-select>
-
+        <el-dialog title="编辑" :visible.sync="editVisible" width="20%">
+          <el-form ref="form" :model="form" label-width="70px">
+            <el-form-item label="账号状态">
+            <el-select v-model="updateform.status" placeholder="账户状态" class="handle-select mr10">
+              <el-option key="1" label="禁用" value="0"></el-option>
+              <el-option key="2" label="启用" value="1"></el-option>
+            </el-select>
+            </el-form-item>
+          </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="saveEdit">确 定</el-button>
             </span>
         </el-dialog>
+
+      <el-dialog title="重置密码" :visible.sync="editPassword" width="20%">
+        <el-form ref="form" :model="form" label-width="70px">
+                <el-form-item label="重置密码">
+                  <el-input v-model="updateform.password"></el-input>
+                </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="editPassword = false">取 消</el-button>
+                <el-button type="primary" @click="savePassword">确 定</el-button>
+            </span>
+      </el-dialog>
     </div>
 </template>
 
@@ -121,11 +142,13 @@ export default {
             updateform:{
                 id:'',
                 status: '',
+                password:'',
             },
             tableData: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
+            editPassword:false,
             pageTotal: 0,
             form: {},
             idx: -1,
@@ -153,18 +176,40 @@ export default {
             this.getData();
         },
         // 删除操作
-        handleDelete(index, row) {
-            // 二次确认删除
-          console.log(row)
-            this.$confirm('确定要删除吗？', '提示', {
-                type: 'warning'
+        // handleDelete(index, row) {
+        //     // 二次确认删除
+        //   console.log(row)
+        //     this.$confirm('确定要删除吗？', '提示', {
+        //         type: 'warning'
+        //     })
+        //         .then(() => {
+        //             this.$message.success('删除成功');
+        //             this.tableData.splice(index, 1);
+        //         })
+        //         .catch(() => {});
+        // },
+
+      resetPassword(row){
+          this.editPassword = true;
+          this.form = row;
+          this.updateform.id = this.form.id
+      },
+
+      savePassword(){
+        this.$confirm('确定要重置密码吗？', '提示', {
+          type: 'warning'
+            }).then(() => {
+              sendPost(api.resetPassword,this.updateform).then(res => {
+                if(res.code===200){
+                  this.$message.success(res.msg);
+                  this.editPassword = false;
+                  this.getData();
+                }else{
+                  this.$message.error(res.msg);
+                }
+              });
             })
-                .then(() => {
-                    this.$message.success('删除成功');
-                    this.tableData.splice(index, 1);
-                })
-                .catch(() => {});
-        },
+      },
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;

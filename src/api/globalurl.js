@@ -16,6 +16,9 @@ class api{
         /**  更新管理员状态   **/
         this.updateUpmAdminStatus = url+'admin/upmAdmin/updateUpmAdminStatus';
 
+        /**  重置密码   **/
+        this.resetPassword = url+'admin/upmAdmin/resetPassword';
+
         /**  角色列表   **/
         this.serachRoleList = url+'admin/upmRole/serachRoleList';
 
