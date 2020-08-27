@@ -63,7 +63,7 @@ export default {
                 },
               {
                 icon: 'el-icon-lx-people',
-                index: 'table',
+                index: 'admin',
                 title: '管理员模块'
               },
                 {

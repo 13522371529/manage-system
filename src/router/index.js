@@ -35,8 +35,8 @@ export default new Router({
                     meta: { title: '自定义图标' }
                 },
                 {
-                    path: '/table',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
+                    path: '/admin',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminlist.vue'),
                     meta: { title: '管理列表' }
                 },
                 // {
