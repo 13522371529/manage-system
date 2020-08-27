@@ -15,7 +15,7 @@
                     class="handle-del mr10"
                     @click="delAllSelection"
                 >批量删除</el-button>
-                <el-select v-model="query.categoryId" placeholder="资源类别" class="handle-select mr10" >
+                <el-select v-model="query.categoryId" placeholder="资源类别" class="handle-select mr10" @change="handleSearch">
                   <el-option key="0" label="全部类别" value=""></el-option>
                   <el-option v-for="item in categoryData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
