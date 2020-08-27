@@ -113,7 +113,7 @@
         </el-form>
 
         <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button @click="addVisible = false">取 消</el-button>
                 <el-button type="primary" @click="saveEdit">确 定</el-button>
             </span>
       </el-dialog>
@@ -130,7 +130,7 @@
           </el-form>
 
         <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button @click="editResource = false">取 消</el-button>
                 <el-button type="primary" @click="saveResource">确 定</el-button>
             </span>
       </el-dialog>
@@ -303,7 +303,7 @@ export default {
       saveResource() {
         //var _this = this;
         let str = '';
-
+        console.log( this.resourceList);
         this.resourceList.forEach(function(value){
           str += value +","
         });
@@ -329,9 +329,22 @@ export default {
         },
         // 分配资源
         handleEditResource(index,row){
+          this.resourceList = [];
+           var _this = this;
            this.roleform = row;
            this.roleResourceform.roleId = this.roleform.id;
-           this.editResource = true;
+           sendPost(api.getRoleResource,this.roleResourceform).then(res => {
+            if(res.code===200){
+              if(res.data.length > 0 ){
+                res.data.forEach(function(li){
+                  _this.resourceList.push(li.id)
+                });
+              }
+            }else{
+              this.$message.error(res.msg);
+            }
+          });
+          this.editResource = true;
         }
     }
 };

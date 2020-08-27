@@ -45,6 +45,9 @@ class api{
 
         /**  获取所有的资源类别   **/
         this.getAllResourceCategoory = url+'admin/upmResource/getAllResourceCategoory';
+
+        /**  根据角色获取资源   **/
+        this.getRoleResource =  url+'admin/upmResource/getRoleResource';
     }
 }
 
