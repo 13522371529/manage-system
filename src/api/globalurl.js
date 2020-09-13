@@ -51,6 +51,15 @@ class api{
 
         /**  根据角色获取资源   **/
         this.getRoleResource =  url+'admin/upmResource/getRoleResource';
+
+
+        /**********************************************************/
+        /** 获取商家列表信息 **/
+        this.searchEnterpriseInfo =  url+'admin/UmsEnterpriseInfo/searchEnterpriseInfo';
+
+        /** 获取城市编码信息 **/
+        this.searchUmsSysCity =  url+'admin/umsSysCity/searchUmsSysCity';
+
     }
 }
 

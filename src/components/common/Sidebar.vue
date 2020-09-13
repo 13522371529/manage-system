@@ -81,6 +81,17 @@ export default {
                       }
                     ]
                 },
+                 {
+                    icon: 'el-icon-lx-copy',
+                    index: 'enterprise',
+                    title: '商家模块',
+                     subs: [
+                       {
+                         index: 'enterpriseList',
+                         title: '商家列表'
+                       }
+                     ]
+                },
                 {
                     icon: 'el-icon-lx-copy',
                     index: 'tabs',

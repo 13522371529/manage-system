@@ -30,6 +30,11 @@ export default new Router({
                     meta: { title: '资源列表' }
                 },
                 {
+                    path: '/enterpriseList',
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/enterprise/enterpriseList.vue'),
+                    meta: { title: '商家列表' }
+                },
+                {
                     path: '/icon',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
                     meta: { title: '自定义图标' }

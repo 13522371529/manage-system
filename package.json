@@ -11,10 +11,11 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
-    "element-ui": "^2.11.0",
-    "mavon-editor": "^2.6.17",
+    "big-integer": "^1.6.48",
     "core-js": "^3.6.5",
+    "element-ui": "^2.11.0",
     "i": "^0.3.6",
+    "mavon-editor": "^2.6.17",
     "vue": "^2.6.11",
     "vue-cropperjs": "^3.0.0",
     "vue-i18n": "^8.10.0",
