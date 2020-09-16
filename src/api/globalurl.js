@@ -57,8 +57,16 @@ class api{
         /** 获取商家列表信息 **/
         this.searchEnterpriseInfo =  url+'admin/UmsEnterpriseInfo/searchEnterpriseInfo';
 
+        /** 新增商家 **/
+        this.saveEnterpriseInfo =  url+'admin/UmsEnterpriseInfo/saveEnterpriseInfo';
+
+
+
         /** 获取城市编码信息 **/
         this.searchUmsSysCity =  url+'admin/umsSysCity/searchUmsSysCity';
+
+        /** 上传文件 **/
+        this.upload =  url+'admin/upload/upload';
 
     }
 }

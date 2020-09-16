@@ -55,7 +55,7 @@ export function get(url){
 }
 
 
-/** 封装 get 请求 **/
+/** 封装 post 请求 **/
 export function sendPost(url,data){
     return new Promise((resolve, reject) => {
         axios({
