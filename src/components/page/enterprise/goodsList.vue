@@ -126,7 +126,7 @@
             <el-input v-model="addEnterpriseForm.nickname" placeholder="商家名称" class="handle-input mr10"></el-input>
           </el-form-item>
           <el-form-item label="法人名字">
-            <el-input v-model="addEnterpriseForm.realname" placeholder="法人名字" class="handle-input mr10"></el-input>
+            <el-input v-model="addEnterpriseForm.realname" placeholder="法人真实姓名" class="handle-input mr10"></el-input>
           </el-form-item>
           <el-form-item label="联系电话">
             <el-input v-model="addEnterpriseForm.phone" placeholder="联系电话" class="handle-input mr10"></el-input>
@@ -167,10 +167,6 @@
 
           <el-form-item label="身份证反面">
             <el-input v-model="addEnterpriseForm.cardImg2" placeholder="身份证反面" class="handle-input mr10"></el-input>
-          </el-form-item>
-
-          <el-form-item label="真实姓名">
-            <el-input v-model="addEnterpriseForm.realname" placeholder="真实姓名" class="handle-input mr10"></el-input>
           </el-form-item>
 
           <el-form-item label="商家照片">

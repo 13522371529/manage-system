@@ -35,6 +35,16 @@ export default new Router({
                     meta: { title: '商家列表' }
                 },
                 {
+                    path: '/addEnterprise',
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/enterprise/addEnterprise.vue'),
+                    meta: { title: '新增商家' }
+                },
+                {
+                    path: '/goodsList',
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/enterprise/goodsList.vue'),
+                    meta: { title: '商品列表' }
+                },
+                {
                     path: '/icon',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
                     meta: { title: '自定义图标' }

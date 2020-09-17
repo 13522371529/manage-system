@@ -89,6 +89,14 @@ export default {
                        {
                          index: 'enterpriseList',
                          title: '商家列表'
+                       },
+                       {
+                         index: 'addEnterprise',
+                         title: '新增商家'
+                       },
+                       {
+                         index: 'goodsList',
+                         title: '商品列表'
                        }
                      ]
                 },
