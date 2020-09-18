@@ -60,7 +60,11 @@ class api{
         /** 新增商家 **/
         this.saveEnterpriseInfo =  url+'admin/UmsEnterpriseInfo/saveEnterpriseInfo';
 
+        /** 商家商品信息列表 **/
+        this.searchEnterpriseGoods =  url+'admin/UmsEnterpriseGoods/searchEnterpriseGoods';
 
+        /** 商家新增商品 **/
+        this.insertEnterpriseGoods =  url+'admin/UmsEnterpriseGoods/insertEnterpriseGoods';
 
         /** 获取城市编码信息 **/
         this.searchUmsSysCity =  url+'admin/umsSysCity/searchUmsSysCity';
